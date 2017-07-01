@@ -1,2 +1,11 @@
-*.class
-*.log
+.DS_Store
+.g8
+logs
+target
+db-file
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
