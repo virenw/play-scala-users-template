@@ -1,0 +1,23 @@
+@(loginForm: Form[LoginData])(implicit request: RequestHeader, m: Messages, header: models.Header)
+@import b3.vertical.fieldConstructor
+
+@main("Login") {
+  <h1>Login to your account</h1>
+
+  @request.flash.get("success").getOrElse("")
+
+  <!--@helper.form(action = routes.LoginController.loginPost()) {
+    @helper.CSRF.formField
+    @helper.inputText(loginForm("name"))
+    @helper.inputText(loginForm("age"))
+    <input type="submit" value="submit"/>
+  }-->
+
+  @b3.form(routes.LoginController.loginPost()) {
+    @helper.CSRF.formField
+    @b3.text( loginForm("name"), '_label -> "Name", 'placeholder -> "Name" )
+    @b3.password( loginForm("password"), '_label -> "Password", 'placeholder -> "Password" )
+    @b3.submit('class -> "btn btn-default"){ Sign in }
+  }
+}
+
