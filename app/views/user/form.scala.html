@@ -2,7 +2,7 @@
 @import b3.vertical.fieldConstructor
 
 @main("User form") {
-  <h1>user form</h1>
+  <h1>Create new user</h1>
 
   @request.flash.get("success").getOrElse("")
 
@@ -17,7 +17,9 @@
   @b3.form(routes.UserController.userPost()) {
     @helper.CSRF.formField
     @b3.text( userForm("name"), '_label -> "Name", 'placeholder -> "Name" )
-    @b3.number( userForm("age"), '_label -> "Age", 'placeholder -> "Age" )
+    @b3.text( userForm("username"), '_label -> "Username", 'placeholder -> "Username" )
+    @b3.email( userForm("email"), '_label -> "Email", 'placeholder -> "Email" )
+    @b3.password( userForm("password"), '_label -> "Password" )
     @b3.submit('class -> "btn btn-default"){ Submit }
   }
 

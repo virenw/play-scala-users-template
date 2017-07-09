@@ -1,1 +1,15 @@
 Play Framework template for user creation and authetication
+
+This template uses,
+
+1. Play 2.5
+2. Bootstrap
+3. Play-Bootstrap https://adrianhurt.github.io/play-bootstrap/
+4. Anorm
+5. SQLite
+
+
+The purpose of this template is to illustrate the following functionality,
+
+1. User creation - User creation as an admin functionality.
+2. User login to access restricted area.

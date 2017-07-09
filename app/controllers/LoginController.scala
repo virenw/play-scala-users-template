@@ -9,8 +9,10 @@ import play.api.data._
 import play.api.data.Forms._
 
 import models.ProvidesHeader
+import models.ProvidesSessionData
+import services.UserService
 
-case class LoginData(name: String, password: String)
+case class LoginData(username: String, password: String)
 
 // NOTE: Add the following to conf/routes to enable compilation of this class:
 /*
@@ -21,12 +23,12 @@ POST    /login        controllers.LoginController.loginPost
 /**
  * Login form controller for Play Scala
  */
-class LoginController @Inject()(implicit val messagesApi: MessagesApi) extends Controller with 
-                                I18nSupport with ProvidesHeader {
+class LoginController @Inject()(userService: UserService, implicit val messagesApi: MessagesApi) extends Controller with 
+                                I18nSupport with ProvidesHeader with ProvidesSessionData {
 
   val loginForm = Form(
     mapping(
-      "name" -> nonEmptyText,
+      "username" -> nonEmptyText,
       "password" -> nonEmptyText
     )(LoginData.apply)(LoginData.unapply)
   )
@@ -49,13 +51,14 @@ class LoginController @Inject()(implicit val messagesApi: MessagesApi) extends C
         /* binding success, you get the actual value. */       
         /* flashing uses a short lived cookie */ 
         //Redirect(routes.LoginController.loginGet()).flashing("success" -> ("Successful " + loginData.toString))
-        Redirect(routes.UserController.userGet()).withSession("user" -> loginData.name)
+        val result = userService.authenticate(loginData.username, loginData.password)
+        if (result.isEmpty) {
+          Redirect(routes.LoginController.loginGet()).flashing("failure" -> ("Failed to login as " + loginData.username))
+        } else {
+          Redirect(routes.HomeController.index()).withSession("user" -> loginData.username)
+        }
       }
     )
-  }
-
-  def isConnected[A](implicit request: Request[A]): Option[String] = {
-    request.session.get("user")
   }
 
 }

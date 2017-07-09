@@ -5,13 +5,14 @@ import play.api._
 import play.api.mvc._
 
 import models.ProvidesHeader
+import models.ProvidesSessionData
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class HomeController @Inject() extends Controller with ProvidesHeader {
+class HomeController @Inject() extends Controller with ProvidesHeader with ProvidesSessionData {
 
   /**
    * Create an Action to render an HTML page.
@@ -29,7 +30,4 @@ class HomeController @Inject() extends Controller with ProvidesHeader {
     }
   }
 
-  def isConnected[A](implicit request: Request[A]): Option[String] = {
-    request.session.get("user")
-  }
 }

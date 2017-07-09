@@ -33,3 +33,6 @@ jdbc,
 //Enable evolutions
 //https://www.playframework.com/documentation/2.5.x/Evolutions
 libraryDependencies += evolutions
+
+// https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+libraryDependencies += "org.mindrot" % "jbcrypt" % "0.4"

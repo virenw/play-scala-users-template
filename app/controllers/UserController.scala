@@ -8,9 +8,13 @@ import play.api.i18n._
 import play.api.data._
 import play.api.data.Forms._
 
-import models.ProvidesHeader
+import play.api.db.DBApi
 
-case class UserData(name: String, age: Int)
+import models.ProvidesHeader
+import models.ProvidesSessionData
+import services.UserService
+
+case class UserData(name: String, username: String, email: String, password: String)
 
 // NOTE: Add the following to conf/routes to enable compilation of this class:
 /*
@@ -21,18 +25,20 @@ POST    /user        controllers.UserController.userPost
 /**
  * User form controller for Play Scala
  */
-class UserController @Inject()(implicit val messagesApi: MessagesApi) extends Controller with 
-                              I18nSupport with ProvidesHeader {
+class UserController @Inject()(userService: UserService, implicit val messagesApi: MessagesApi) 
+                extends Controller with I18nSupport with ProvidesHeader with ProvidesSessionData {
 
   val userForm = Form(
     mapping(
-      "name" -> text,
-      "age" -> number
+      "name" -> nonEmptyText,
+      "username" -> nonEmptyText,
+      "email" -> email,
+      "password" -> nonEmptyText
     )(UserData.apply)(UserData.unapply)
   )
 
   def userGet = Action { implicit request =>
-  if (request.session.get("user") != None) {
+  if (isConnected != None) {
       Ok(views.html.user.form(userForm))
     } else {
       Redirect(routes.HomeController.index())
@@ -48,7 +54,9 @@ class UserController @Inject()(implicit val messagesApi: MessagesApi) extends Co
       userData => {
         /* binding success, you get the actual value. */       
         /* flashing uses a short lived cookie */ 
-        Redirect(routes.UserController.userGet()).flashing("success" -> ("Successful " + userData.toString))
+        //Redirect(routes.UserController.userGet()).flashing("success" -> ("Successful " + userData.toString))
+        userService.createUser(userData)
+        Redirect(routes.HomeController.index)
       }
     )
   }
