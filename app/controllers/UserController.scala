@@ -38,10 +38,10 @@ class UserController @Inject()(userService: UserService, implicit val messagesAp
   )
 
   def userGet = Action { implicit request =>
-  if (isConnected != None) {
+  if (isAdmin) {
       Ok(views.html.user.form(userForm))
     } else {
-      Redirect(routes.HomeController.index())
+      Unauthorized(views.html.error("You need to be the admin to access this page!"))
     }
   }
 
