@@ -10,6 +10,7 @@ import play.api.data.Forms._
 
 import models.ProvidesHeader
 import models.ProvidesSessionData
+import models.AddsNoCacheHeaders
 import services.UserService
 
 case class LoginData(username: String, password: String)
@@ -23,8 +24,11 @@ POST    /login        controllers.LoginController.loginPost
 /**
  * Login form controller for Play Scala
  */
-class LoginController @Inject()(userService: UserService, implicit val messagesApi: MessagesApi) extends Controller with 
-                                I18nSupport with ProvidesHeader with ProvidesSessionData {
+class LoginController @Inject()(userService: UserService, implicit val messagesApi: MessagesApi) 
+            extends Controller 
+            with I18nSupport 
+            with ProvidesHeader 
+            with ProvidesSessionData {
 
   val loginForm = Form(
     mapping(

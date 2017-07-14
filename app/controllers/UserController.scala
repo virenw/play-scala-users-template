@@ -12,6 +12,7 @@ import play.api.db.DBApi
 
 import models.ProvidesHeader
 import models.ProvidesSessionData
+import models.AddsNoCacheHeaders
 import services.UserService
 
 case class UserData(name: String, username: String, email: String, password: String)
@@ -26,7 +27,11 @@ POST    /user        controllers.UserController.userPost
  * User form controller for Play Scala
  */
 class UserController @Inject()(userService: UserService, implicit val messagesApi: MessagesApi) 
-                extends Controller with I18nSupport with ProvidesHeader with ProvidesSessionData {
+                extends Controller 
+                with I18nSupport 
+                with ProvidesHeader 
+                with ProvidesSessionData 
+                with AddsNoCacheHeaders {
 
   val userForm = Form(
     mapping(
@@ -39,9 +44,10 @@ class UserController @Inject()(userService: UserService, implicit val messagesAp
 
   def userGet = Action { implicit request =>
   if (isAdmin) {
-      Ok(views.html.user.form(userForm))
+      addNoCacheHeaders(Ok(views.html.user.form(userForm)))
     } else {
-      Unauthorized(views.html.error("You need to be the admin to access this page!"))
+      //Unauthorized(views.html.error("You need to be the admin to access this page!"))
+      Redirect(routes.HomeController.index())
     }
   }
 
@@ -56,7 +62,7 @@ class UserController @Inject()(userService: UserService, implicit val messagesAp
         /* flashing uses a short lived cookie */ 
         //Redirect(routes.UserController.userGet()).flashing("success" -> ("Successful " + userData.toString))
         userService.createUser(userData)
-        Redirect(routes.HomeController.index)
+        Redirect(routes.HomeController.index())
       }
     )
   }
