@@ -1,0 +1,28 @@
+@(users: List[UserView])(implicit header: models.Header)
+
+@main("all users") {
+
+    <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">All Users</div>
+    <!-- Table -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(u <- users) {
+            <tr>
+                <td>@u.name</td>
+                <td>@u.username</td>
+                <td>@u.email</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+}

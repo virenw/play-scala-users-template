@@ -11,6 +11,7 @@ GET     /login                      controllers.LoginController.loginGet
 POST    /login                      controllers.LoginController.loginPost
 GET     /logout                     controllers.Application.logout
 #GET    /isConnected                controllers.LoginController.isConnected
+GET     /listusers                  controllers.AdminController.listUsers
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

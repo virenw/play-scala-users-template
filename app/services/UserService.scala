@@ -4,6 +4,7 @@ import anorm._
 import anorm.SqlParser._
 import play.api.db.DBApi
 import controllers.UserData
+import models.UserView
 import javax.inject._
 import org.mindrot.jbcrypt.BCrypt
 
@@ -77,6 +78,20 @@ class UserService @Inject()(implicit dbapi: DBApi) {
             count == 1
         }
     }
+
+    val selectAllUsersSQL = SQL(
+        """
+        select * from Users
+        """
+    )
+
+    val allUserParser = str("name") ~ str("username") ~ str("email") map { to (UserView.apply _) }
+
+    def getUsers(): List[(UserView)] = {
+         db.withConnection { implicit c => 
+            selectAllUsersSQL.as(allUserParser.*)
+         }
+    } 
 
     createAdmin
 
