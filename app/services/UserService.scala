@@ -81,7 +81,7 @@ class UserService @Inject()(implicit dbapi: DBApi) {
 
     val selectAllUsersSQL = SQL(
         """
-        select * from Users
+        select * from Users order by name
         """
     )
 
